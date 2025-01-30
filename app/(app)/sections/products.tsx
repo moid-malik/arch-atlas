@@ -1,6 +1,5 @@
 import ProductList from "@/components/ProductList";
 import { getLatestProducts } from "@/services/product";
-import React from "react";
 
 export default async function Products() {
   const products = await getLatestProducts();

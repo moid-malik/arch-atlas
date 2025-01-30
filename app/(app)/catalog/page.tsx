@@ -7,39 +7,39 @@ import Filters from "./Filters";
 import { Product } from "@/types/product";
 import { FiFilter } from "react-icons/fi";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const originalProducts = useRef<Product[]>([]);
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get('search');
 
   useEffect(() => {
     getProducts().then((products) => {
-      setFilteredProducts(products);
       originalProducts.current = products;
+      if (searchQuery) {
+        const searchResults = products.filter(product =>
+          product.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredProducts(searchResults);
+      } else {
+        setFilteredProducts(products);
+      }
     });
-  }, []);
+  }, [searchQuery]);
 
   return (
     <div className="flex md:flex-row flex-col py-12 w-full relative">
-      <Sheet>
-        <SheetTrigger asChild>
-          <button className="fixed top-24 left-4 z-50 p-3 bg-black text-white rounded-full shadow-lg hover:bg-zinc-800">
-            <FiFilter size={20} />
-          </button>
-        </SheetTrigger>
-        <SheetContent side="left" className="p-0">
           <Filters
             products={originalProducts.current}
             setProducts={setFilteredProducts}
           />
-        </SheetContent>
-      </Sheet>
-
       <div className="space-y-2 md:p-20 p-12 w-full">
         <span className="font-semibold text-zinc-500 text-sm">
           Showing {filteredProducts.length} results
         </span>
-        <ProductList products={filteredProducts} />
+        <ProductList  products={filteredProducts} />
       </div>
     </div>
   );

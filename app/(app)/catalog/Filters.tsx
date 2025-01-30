@@ -34,7 +34,7 @@ export default function Filters({ products, setProducts }: Props) {
   const toggleColor = (color: string) => {
     const exists = isColorSelected(color);
     if (exists) {
-      // removing the color of the array
+
       const nColors = selectedColors.filter((c) => c !== color);
       setSelectedColors(nColors);
     } else {
@@ -50,18 +50,16 @@ export default function Filters({ products, setProducts }: Props) {
 
   useEffect(() => {
     let filteredProducts = products
-    //colors 
     filteredProducts = 
         selectedColors.length === 0 
         ? products
         : filteredProducts.filter(p => selectedColors.includes(p.color))
     
-    // price 
     filteredProducts = filteredProducts.filter(p => p.price >= minPrice)
     setProducts(filteredProducts)
   }, [minPrice, selectedColors])
   return (
-    <div className="flex flex-col gap-6 px-6 py-10">
+    <div className="flex flex-col gap-6 pl-12 py-10 max-w-[340px]">
       <div className="space-y-2">
         <span className="font-semibold text-zinc-500 text-sm">Price Range</span>
         <div className="flex items-center gap-1">
