@@ -1,0 +1,57 @@
+[
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "image",
+        "type": "image"
+      },
+      {
+        "name": "color",
+        "type": "string"
+      },
+      {
+        "name": "price",
+        "type": "number"
+      },
+      {
+        "name": "purchases",
+        "type": "number"
+      }
+    ],
+    "name": "product",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "to": [
+          {
+            "type": "product"
+          }
+        ],
+        "name": "product",
+        "type": "reference"
+      }
+    ],
+    "name": "main_product",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "name": "password",
+        "type": "string"
+      }
+    ],
+    "name": "admin",
+    "type": "document"
+  }
+]
