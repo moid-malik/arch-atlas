@@ -59,7 +59,7 @@ export default function Filters({ products, setProducts }: Props) {
     setProducts(filteredProducts)
   }, [minPrice, selectedColors])
   return (
-    <div className="flex flex-col gap-6 pl-12 py-10 max-w-[340px]">
+    <div className="flex flex-col gap-6 pl-12 py-10 max-w-[280px]">
       <div className="space-y-2">
         <span className="font-semibold text-zinc-500 text-sm">Price Range</span>
         <div className="flex items-center gap-1">
