@@ -1,8 +1,8 @@
-"use client"
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
+"use client";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 export interface Address {
   name: string;
@@ -14,54 +14,57 @@ export interface Address {
 }
 
 interface Props {
-  onAddressSubmit: (address: Address, rates: any[]) => void;
+  onAddressSubmit: (address: Address, rates: Rate[]) => void;
 }
+
 
 export function ShippingAddressForm({ onAddressSubmit }: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<Address>({
     defaultValues: {
-      country: 'PK'
-    }
+      country: "PK",
+    },
   });
-  
+
   const [loading, setLoading] = useState(false);
 
   const onSubmit = handleSubmit(async (data: Address) => {
     if (loading) return;
     setLoading(true);
-    
+
     try {
-      data.zip = data.zip.replace(/\s/g, '');
-      const response = await fetch('/api/shippo/rates', {
-        method: 'POST',
+      data.zip = data.zip.replace(/\s/g, "");
+      const response = await fetch("/api/shippo/rates", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           addressTo: data,
-          items: [{
-            length: 10,
-            width: 6,
-            height: 4,
-            weight: 2,
-          }] 
+          items: [
+            {
+              length: 10,
+              width: 6,
+              height: 4,
+              weight: 2,
+            },
+          ],
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch shipping rates');
+        throw new Error("Failed to fetch shipping rates");
       }
-      
+
       const rates = await response.json();
       onAddressSubmit(data, rates);
       reset();
     } catch (error: any) {
-      console.error('Error fetching rates:', error);
+      console.error("Error fetching rates:", error);
       alert(error.message);
     } finally {
       setLoading(false);
@@ -190,13 +193,7 @@ export function ShippingAddressForm({ onAddressSubmit }: Props) {
         </div>
       </div>
 
-      <Button
-        // type=""
-        size={"lg"}
-        onClick={() => {
-          alert("Not implemented");
-        }}
-        disabled={loading}>
+      <Button type="submit" size={"lg"} disabled={loading}>
         {loading ? "Loading..." : "Continue to Shipping"}
       </Button>
     </form>

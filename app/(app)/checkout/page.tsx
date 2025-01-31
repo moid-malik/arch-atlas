@@ -1,7 +1,7 @@
 "use client";
 import { ShippingAddressForm, Address } from "@/components/ShippingAddressForm";
 import { ShippingRates } from "@/components/ShippingRates";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useCart } from "@/stores/cart";
 import { Rate } from "@/types/shipping";
 import { Button } from "@/components/ui/button";
@@ -13,60 +13,56 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const { products } = useCart();
 
-  const fetchRates = async (addressData: Address) => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/shippo/rates", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ addressTo: addressData, items: products }),
-      });
-      const data = await response.json();
-      setRates(data);
-    } catch (error) {
-      console.error("Error fetching rates:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAddressSubmit = (addressData: Address) => {
+  const handleAddressSubmit = (addressData: Address, shippingRates: Rate[]) => {
     setAddress(addressData);
-    if (products.length > 0) {
-      fetchRates(addressData);
-    }
+    setRates(shippingRates);
   };
 
-  function handlePurchase(): void {
-    //no payment integration for this app
-  }
+  const handlePurchase = () => {
+    // Implement payment integration here
+    console.log('Processing purchase with:', {
+      address,
+      selectedRate,
+      products
+    });
+  };
 
   return (
     <div className="container mx-auto p-4 mt-20">
-      <ShippingAddressForm onAddressSubmit={handleAddressSubmit} />
-      {address && (
-        <ShippingRates
-          address={address}
-          items={products}
-          rates={rates}
-          loading={loading}
-          onRateSelect={setSelectedRate}
-        />
-      )}
-      {products?.length === 0 && (
-        <div className="text-red-500 mt-4">
-          Your cart is empty. Please add items before checkout.
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-2xl font-bold mb-8">Checkout</h1>
+        
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <h2 className="text-xl font-semibold mb-4">Shipping Address</h2>
+          <ShippingAddressForm onAddressSubmit={handleAddressSubmit} />
         </div>
-      )}
-      <Button
-        size={"lg"}
-        onClick={handlePurchase}
-        disabled={!selectedRate || !address || products.length === 0}
-        className="mt-8">
-        Continue to Payment
-      </Button>
+
+        {address && (
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <ShippingRates
+              address={address}
+              items={products}
+              rates={rates}
+              loading={loading}
+              onRateSelect={setSelectedRate}
+            />
+          </div>
+        )}
+
+        {products?.length === 0 && (
+          <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-8">
+            Your cart is empty. Please add items before checkout.
+          </div>
+        )}
+
+        <Button
+          size="lg"
+          onClick={handlePurchase}
+          disabled={!selectedRate || !address || products.length === 0}
+          className="w-full">
+          Continue to Payment
+        </Button>
+      </div>
     </div>
   );
 }
