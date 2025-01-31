@@ -1,22 +1,28 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Input } from '../ui/input'
 import { useDebouncedCallback } from 'use-debounce'
 
 export default function Search() {
     const router = useRouter()
-    const searchParams = useSearchParams()
 
     const handleSearch = useDebouncedCallback((term: string) => {
-        const params = new URLSearchParams(searchParams)
+        const currentUrl = new URL(window.location.href)
         if (term) {
-            params.set('search', term)
+            currentUrl.searchParams.set('search', term)
         } else {
-            params.delete('search')
+            currentUrl.searchParams.delete('search')
         }
-        router.push(`/catalog?${params.toString()}`, { scroll: false })
+        router.push(currentUrl.pathname + currentUrl.search, { scroll: false })
     }, 50)
+
+    const getCurrentSearchTerm = () => {
+        if (typeof window !== 'undefined') {
+            return new URLSearchParams(window.location.search).get('search') || ''
+        }
+        return ''
+    }
 
     return (
         <Input 
@@ -25,7 +31,7 @@ export default function Search() {
             placeholder='Search...'
             className='w-[400px]'
             onChange={(e) => handleSearch(e.target.value)}
-            defaultValue={searchParams.get('search') ?? ''}
+            defaultValue={getCurrentSearchTerm()}
         />
     )
 }
