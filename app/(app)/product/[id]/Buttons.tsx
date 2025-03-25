@@ -15,9 +15,6 @@ export default function Buttons({ product }: { product: Product }) {
    >
       Add to cart
     </Button>
-    <Button size="lg" className="text-[17px] py-8 w-full">
-      Buy now
-    </Button>
   </div>
   )
 }

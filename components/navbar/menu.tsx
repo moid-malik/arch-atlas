@@ -9,16 +9,21 @@ export default function Menu() {
   return (
     <div className='inline md:hidden'>
         <Sheet>
-            <SheetTrigger>
+            <SheetTrigger className="flex items-center justify-center p-2">
                 <IoMenu className='text-2xl text-zinc-800' />
             </SheetTrigger>
-            <SheetContent className='flex flex-col items-center justify-center gap-12'>
-            <Logo />
-            <Links />
-            <Search />
+            <SheetContent side="left" className='flex flex-col pt-8 pb-12 px-4 gap-8 overflow-y-auto'>
+                <div className="flex justify-center w-full">
+                    <Logo />
+                </div>
+                <div className="w-full">
+                    <Search isMobile={true} />
+                </div>
+                <div className="flex flex-col items-center w-full">
+                    <Links />
+                </div>
             </SheetContent>
         </Sheet>
-
     </div>
   )
 }
