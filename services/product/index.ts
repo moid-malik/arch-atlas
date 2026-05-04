@@ -1,7 +1,7 @@
 import { sanity } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { Product } from "@/types/product";
-
+// import { updatePurchases } from "./purchases";
 
 
 export async function getMainProduct() {
