@@ -34,10 +34,6 @@ export default async function Hero() {
               {mainProduct.price}$
             </span>
           </p>
-          <Button size="lg" className="w-fit flex items-center gap-2">
-            <span>Buy now</span>
-            <IoArrowForward />
-          </Button>
         </div>
       </div>
     </div>
